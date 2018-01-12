@@ -1,6 +1,6 @@
 {
   "name": "t-rpc",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An RPC client/server for Taf server",
   "main": "index.js",
   "scripts": {
