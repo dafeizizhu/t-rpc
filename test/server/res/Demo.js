@@ -1,6 +1,6 @@
 const TModel = require('t-model')
-const TafProtocolClient = require('t-rpc/lib/protocols/taf/client')
-const { RpcError, ClientDecodeError, ServerFuncNotFoundError } = require('t-rpc/lib/util/rpc-error')
+const TafProtocolClient = require('../../../lib/protocols/taf/client')
+const { RpcError, ClientDecodeError, ServerFuncNotFoundError } = require('../../../lib/util/rpc-error')
 
 class DemoStruct extends TModel.TStruct {
   static parse (value) {
