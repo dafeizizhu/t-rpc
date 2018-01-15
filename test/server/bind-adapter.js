@@ -95,7 +95,7 @@ describe('BindAdapter', () => {
     let serverStub = serverStubs[0]
 
     bindAdapter.start()
-    assert(serverStub._listenSpy.callCount, 1)
+    assert.equal(serverStub._listenSpy.callCount, 1)
     let listenSpyCall = serverStub._listenSpy.getCall(0)
     assert.deepEqual(listenSpyCall.args, [port, host])
 

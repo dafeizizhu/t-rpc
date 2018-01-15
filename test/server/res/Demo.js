@@ -1,6 +1,7 @@
 const TModel = require('t-model')
 const TafProtocolClient = require('../../../lib/protocols/taf/client')
 const { RpcError, ClientDecodeError, ServerFuncNotFoundError } = require('../../../lib/util/rpc-error')
+const ResponseMessage = require('../../../lib/util/response-message')
 
 class DemoStruct extends TModel.TStruct {
   static parse (value) {
@@ -163,14 +164,16 @@ class DemoFServant {
         let str = TModel.TString.read(is, 1, true)
         return this.echo(str).then(ret => {
           new (TModel.TString)(ret.return).write(os, 0)
-          let responseMessage = {
+          let responseMessage = new ResponseMessage({
             requestId,
             code: 0,
             message: 'success',
             responsePacket: {
-              sBuffer: os.tBuffer.buffer
+              iMessageType: 0,
+              sBuffer: os.tBuffer.buffer,
+              context: requestMessage.context || {}
             }
-          }
+          })
           return Promise.resolve({ responseMessage })
         }).catch(error => {
           let code = error.code ? error.code : -999
@@ -185,14 +188,16 @@ class DemoFServant {
         let list = TModel.TList(TModel.TString).read(is, 3, true)
         return this.assemble(id, name, list).then(ret => {
           new (DemoStruct)(ret.return).write(os, 0)
-          let responseMessage = {
+          let responseMessage = new ResponseMessage({
             requestId,
             code: 0,
             message: 'success',
             responsePacket: {
-              sBuffer: os.tBuffer.buffer
+              iMessageType: 0,
+              sBuffer: os.tBuffer.buffer,
+              context: requestMessage.context || {}
             }
-          }
+          })
           return Promise.resolve({ responseMessage })
         }).catch(error => {
           let code = error.code ? error.code : -999
@@ -207,14 +212,16 @@ class DemoFServant {
         let count = TModel.TInt32.read(is, 3, true)
         return this.replicate(name, list, count).then(ret => {
           new (TModel.TList(DemoStruct))(ret.return).write(os, 0)
-          let responseMessage = {
+          let responseMessage = new ResponseMessage({
             requestId,
             code: 0,
             message: 'success',
             responsePacket: {
-              sBuffer: os.tBuffer.buffer
+              iMessageType: 0,
+              sBuffer: os.tBuffer.buffer,
+              context: requestMessage.context || {}
             }
-          }
+          })
           return Promise.resolve({ responseMessage })
         }).catch(error => {
           let code = error.code ? error.code : -999
