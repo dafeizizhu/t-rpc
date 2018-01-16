@@ -1,9 +1,9 @@
-const TafProtocol = require('./lib/protocols/taf')
-const TafClient = require('./lib/client/communicator')
-const TafErrors = require('./lib/util/rpc-error')
+const TClient = require('./lib/client/t-client')
+const TServer = require('./lib/server/t-server')
+const TErrors = require('./lib/util/rpc-error')
 
 module.exports = {
-  TafProtocol,
-  TafClient,
-  TafErrors
+  TClient,
+  TServer,
+  TErrors
 }
