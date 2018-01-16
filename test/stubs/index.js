@@ -36,6 +36,7 @@ class ServerStub extends EventEmitter {
     serverStubs.push(this)
   }
   listen (port, address) {
+    if (this._listenCb) this._listenCb()
     this._listenSpy(port, address)
   }
   close (cb) {
