@@ -10,6 +10,7 @@ class SocketStub extends EventEmitter {
     this._connectSpy = sinon.spy()
     this._destroySpy = sinon.spy()
     this._writeSpy = sinon.spy()
+    this._setTimeoutSpy = sinon.spy()
 
     socketStubs.push(this)
   }
@@ -21,6 +22,9 @@ class SocketStub extends EventEmitter {
   }
   write (buffer) {
     this._writeSpy(buffer)
+  }
+  setTimeout (timeout) {
+    this._setTimeoutSpy(timeout)
   }
 }
 
@@ -36,7 +40,9 @@ class ServerStub extends EventEmitter {
     serverStubs.push(this)
   }
   listen (port, address) {
-    if (this._listenCb) this._listenCb()
+    if (typeof this._listenCb === 'function') {
+      this._listenCb()
+    }
     this._listenSpy(port, address)
   }
   close (cb) {

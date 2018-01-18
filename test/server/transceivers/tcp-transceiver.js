@@ -45,6 +45,17 @@ describe('TCPTransceiver', () => {
     assert.equal(onCloseSpy.callCount, 1)
     assert.equal(socketStub._destroySpy.callCount, 1)
   })
+  it('socket timeout emit', () => {
+    let socketStub = new stubs.net.Socket()
+    let transceiver = new TCPTransceiver(socketStub)
+    let onCloseSpy = sinon.spy()
+    transceiver.on('close', onCloseSpy)
+
+    socketStub.emit('timeout')
+
+    assert.equal(onCloseSpy.callCount, 1)
+    assert.equal(socketStub._destroySpy.callCount, 1)
+  })
   it('socket close emit', () => {
     let socketStub = new stubs.net.Socket()
     let transceiver = new TCPTransceiver(socketStub)
