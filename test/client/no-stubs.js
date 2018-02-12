@@ -2,7 +2,7 @@
 
 const path = require('path')
 const assert = require('assert')
-const { TConfig } = require('@taf2/util')
+const { TConfig } = require('t-util')
 
 const TClient = require('../../lib/client/t-client')
 const { DemoFProxy } = require('./res/Demo').Demo

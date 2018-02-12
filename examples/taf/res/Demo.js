@@ -1,7 +1,8 @@
 const TModel = require('t-model')
-const TafProtocolClient = require('../../../lib/protocols/taf/client')
-const { RpcError, ClientDecodeError, ServerFuncNotFoundError } = require('../../../lib/util/rpc-error')
-const ResponseMessage = require('../../../lib/util/response-message')
+const TRpc = require('t-rpc')
+const TafProtocolClient = TRpc.protocols.taf.Client
+const { RpcError, ClientDecodeError, ServerFuncNotFoundError } = TRpc.errors
+const { ResponseMessage } = TRpc.messages
 
 class DemoStruct extends TModel.TStruct {
   static parse (value) {
@@ -90,7 +91,8 @@ class DemoFProxy {
         response.return = TModel.TString.read(is, 0, true)
         return { request: rpcResult.requestMessage, response }
       } catch (error) {
-        throw new ClientDecodeError(error.message, rpcResult.requestMessage, rpcResult.responseMessage, rpcResult.costTime, rpcResult.endpointInfo)
+        let message = error.responseMessage ? error.responseMessage.message : error.message
+        throw new ClientDecodeError(message, rpcResult.requestMessage, rpcResult.responseMessage, rpcResult.costTime, rpcResult.endpointInfo)
       }
     }
     let _error = rpcError => {
@@ -116,7 +118,8 @@ class DemoFProxy {
         response.return = DemoStruct.read(is, 0, true)
         return { request: rpcResult.requestMessage, response }
       } catch (error) {
-        throw new ClientDecodeError(error.message, rpcResult.requestMessage, rpcResult.responseMessage, rpcResult.costTime, rpcResult.endpointInfo)
+        let message = error.responseMessage ? error.responseMessage.message : error.message
+        throw new ClientDecodeError(message, rpcResult.requestMessage, rpcResult.responseMessage, rpcResult.costTime, rpcResult.endpointInfo)
       }
     }
     let _error = rpcError => {
@@ -142,7 +145,8 @@ class DemoFProxy {
         response.return = TModel.TList(DemoStruct).read(is, 0, true)
         return { request: rpcResult.requestMessage, response }
       } catch (error) {
-        throw new ClientDecodeError(error.message, rpcResult.requestMessage, rpcResult.responseMessage, rpcResult.costTime, rpcResult.endpointInfo)
+        let message = error.responseMessage ? error.responseMessage.message : error.message
+        throw new ClientDecodeError(message, rpcResult.requestMessage, rpcResult.responseMessage, rpcResult.costTime, rpcResult.endpointInfo)
       }
     }
     let _error = rpcError => {

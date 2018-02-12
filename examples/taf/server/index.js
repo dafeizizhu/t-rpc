@@ -8,7 +8,7 @@ const { DemoFServant } = require('../res/Demo').Demo
 class DemoFServantImp extends DemoFServant {
   echo (str) {
     let ret = {}
-    ret.return = 'echo at @taf2/rpc: ' + str
+    ret.return = 'echo at t-rpc ' + str
     return Promise.resolve(ret)
   }
 }
