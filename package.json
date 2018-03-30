@@ -6,6 +6,7 @@
   "scripts": {
     "mocha": "mocha",
     "test": "mocha test",
+    "test-inspect": "mocha --inspect=0.0.0.0:9229 --debug-brk test",
     "coverage": "istanbul cover _mocha -x '**/res/**'"
   },
   "repository": {

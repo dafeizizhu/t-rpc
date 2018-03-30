@@ -111,9 +111,27 @@ describe('TCPTransceiver', () => {
 
     await transceiver.connect()
 
-    // emit close
+    // emit error
     let error = new Error('foo')
     socketStub.emit('error', error)
+    assert.equal(socketStub._destroySpy.callCount, 1)
+  })
+  it('socket timeout emit', async () => {
+    let transceiver = new TCPTransceiver(address, port)
+    let socketStub
+
+    // async step 1. trigger connect
+    setTimeout(() => {
+      let socketStubs = stubs.net.getSocketStubs()
+      assert(socketStubs.length === 1)
+      socketStub = socketStubs[0]
+      socketStub.emit('connect')
+    }, 100)
+
+    await transceiver.connect()
+
+    // emit timeout
+    socketStub.emit('timeout')
     assert.equal(socketStub._destroySpy.callCount, 1)
   })
   it('close when socket is connecting', () => {
@@ -126,6 +144,31 @@ describe('TCPTransceiver', () => {
     socketStub = socketStubs[0]
 
     transceiver.close()
+    assert.equal(socketStub._destroySpy.callCount, 1)
+  })
+  it('connect error', async () => {
+    let transceiver = new TCPTransceiver(address, port)
+    let socketStub
+
+    transceiver.connect()
+    let socketStubs = stubs.net.getSocketStubs()
+    assert(socketStubs.length === 1)
+    socketStub = socketStubs[0]
+
+    let error = new Error('foo')
+    socketStub.emit('error', error)
+    assert.equal(socketStub._destroySpy.callCount, 1)
+  })
+  it('connect timeout', async () => {
+    let transceiver = new TCPTransceiver(address, port)
+    let socketStub
+
+    transceiver.connect()
+    let socketStubs = stubs.net.getSocketStubs()
+    assert(socketStubs.length === 1)
+    socketStub = socketStubs[0]
+
+    socketStub.emit('timeout')
     assert.equal(socketStub._destroySpy.callCount, 1)
   })
 })
